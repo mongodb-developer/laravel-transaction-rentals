@@ -24,41 +24,43 @@ class RentalController extends Controller
             'endDate' => 'required|date'
             // Add other necessary validation rules
         ]);
-
+        try{
         // Start transaction
-        DB::beginTransaction();
+        DB::transaction(function() {
+            $rental = Rental::where(['name' => null])->first();
+                if (!$rental) {
+                    throw new Exception('Rental not found');
+                }
+    
+                // Assume newAvailability is coming from the request or define how it should be set
+                $newAvailability = [
+                    [
+                        "start_date" => new \MongoDB\BSON\UTCDateTime(new \DateTime('2024-01-01')),
+                        "end_date" => new \MongoDB\BSON\UTCDateTime(new \DateTime('2024-05-31'))
+                    ],
+                    [
+                        "start_date" => new \MongoDB\BSON\UTCDateTime(new \DateTime('2024-06-08')),
+                        "end_date" => new \MongoDB\BSON\UTCDateTime(new \DateTime('2026-12-31'))
+                    ]
+                ]; // Set the availability dates based on business logic
+    
+                // Update rental availability
+                $rental->availability = $newAvailability;
+                $rental->save();
+    
+                // Create booking record
+                $booking = new Booking([
+                    'rental_name' => null,
+                    'booking_date' => now(),
+                    'status' => 'confirmed',
+                ]);
+                $booking->save();
+                return response()->json(['message' => 'Booking successful', 'booking_id' => $booking->id], 200);
+        },
+         5); // Retry up to 5 times in case of failure
+    
 
-        try {
-            $rental = Rental::find($validated['name']);
-            if (!$rental) {
-                throw new Exception('Rental not found');
-            }
-
-            // Assume newAvailability is coming from the request or define how it should be set
-            $newAvailability = [
-                ["startDate" => new \DateTime('2024-01-01'),
-                "endDate" => new \DateTime('2024-05-31')],
-                ["startDate" => new \DateTime('2024-06-08'),
-                "endDate" => new \DateTime('2026-12-31')]
-            ]; // Set the availability dates based on business logic
-
-            // Update rental availability
-            $rental->availability = $newAvailability;
-            $rental->save();
-
-            // Create booking record
-            $booking = new Booking([
-                'rental_id' => $validated['rentalId'],
-                'guest_name' => $validated['guestName'],
-                'booking_date' => now(),
-                'status' => 'confirmed',
-            ]);
-            $booking->save();
-
-            // Commit the transaction
-            DB::commit();
-
-            return response()->json(['message' => 'Booking successful', 'booking_id' => $booking->id], 200);
+            
         } catch (\Exception $e) {
             // Rollback the transaction in case of any exception
             DB::rollBack();
