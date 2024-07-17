@@ -1,3 +1,5 @@
+# Laravel Transaction Rentals
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
@@ -21,47 +23,102 @@ Laravel is a web application framework with expressive, elegant syntax. We belie
 
 Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-## Learning Laravel
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+This repository contains the code for a sample application demonstrating the use of MongoDB transactions with Laravel. The application simulates a rental service for different types of items.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Prerequisites
 
-## Laravel Sponsors
+Before running the application, ensure you have the following installed:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+- PHP 7.3 or higher
+- Composer
+- Laravel 6.x or higher
+- MongoDB Atlas account and cluster
+- MongoDB PHP driver
 
-### Premium Partners
+## Installation
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+Follow these steps to set up and run the application:
+
+1. **Clone the repository:**
+
+   ```
+   git clone https://github.com/mongodb-developer/laravel-transaction-rentals.git
+   cd laravel-transaction-rentals
+   ```
+
+2. **Install dependencies:**
+
+   ```
+   composer install
+   ```
+
+3. **Set up environment variables:**
+
+   Copy the `.env.example` file to `.env` and update the MongoDB Atlas connection settings.
+
+   ```
+   cp .env.example .env
+   ```
+
+   Update the following variables in the `.env` file with your MongoDB Atlas connection details:
+
+   ```
+    DB_URI="..."
+   ```
+
+   You will find your MongoDB Atlas connection string in the Atlas UI under "Connect".
+
+## Load the dataset
+
+In your database use "sample_airbnb.rentals" collection.
+
+1. Use [Atlas data explorer](https://www.mongodb.com/docs/atlas/atlas-ui/documents/#insert-documents) to upload the following [rentals.json](https://raw.githubusercontent.com/mongodb-developer/symfony-mongodb-atlas-rentals/main/data/symfony.rentals.json) array into the "Insert Document" json array to upload initial rentals
+
+2. We can use the [mongosh](https://www.mongodb.com/docs/mongodb-shell/install/) shell to insert some data into the rentals collection.
+
+## Usage
+
+To run the application, use the following command:
+
+-- code block : shell --
+php artisan serve
+-- end block --
+
+Visit `http://localhost:8000` in your web browser to access the application.
+
+## Features
+
+- **Transaction Management:** Demonstrates the use of MongoDB transactions for rental operations.
+
+## Code Overview
+
+### Models
+
+- `Item`: Represents an item available for rent.
+- `Rental`: Represents a rental transaction.
+- `User`: Represents a user in the system.
+
+### Controllers
+
+- `ItemController`: Manages the CRUD operations for items.
+- `RentalController`: Manages the rental transactions.
+  
+### Routes
+
+- `web.php`: Contains the web routes for the application.
+
 
 ## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Contributions are welcome! Please submit a pull request for any changes you would like to make.
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-# laravel-transaction-rentals
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## Acknowledgements
+
+This project is maintained by the MongoDB Developer team. For more information, visit the [official website](https://www.mongodb.com).
+
