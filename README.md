@@ -82,9 +82,9 @@ In your database use "sample_airbnb.rentals" collection.
 
 To run the application, use the following command:
 
--- code block : shell --
+```
 php artisan serve
--- end block --
+```
 
 Visit `http://localhost:8000` in your web browser to access the application.
 
